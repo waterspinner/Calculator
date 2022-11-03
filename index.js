@@ -52,6 +52,10 @@ keys.addEventListener('click', (event) => {
       console.log(calculator);
       return;
     }
+    if (target.classList.contains('delete')) {
+      deleteLastDigit();
+      updateDisplay();
+    }
     inuptDigit(target.value);
     
     updateDisplay();
@@ -60,8 +64,11 @@ keys.addEventListener('click', (event) => {
 // take digit input and display
 function inuptDigit(digit) {
   const {displayValue, waitingForSecondOperand} = calculator;
+  if (digit === 'delete') {
+    return;
+  }
   //if firstOperand and operator entered, clear screen and wait for second operand
-  if (waitingForSecondOperand === true) {
+  else if (waitingForSecondOperand === true) {
     //this clears screen of first operand, and assigns digit the new second operand
     calculator.displayValue = digit;
     calculator.waitingForSecondOperand = false;
@@ -110,6 +117,7 @@ function handleOperator (nextOperator) {
   }
 
   calculator.waitingForSecondOperand = true;
+  //assign operator value to operator property in calculator object
   calculator.operator = nextOperator;
   console.log(calculator);
 }
@@ -145,4 +153,16 @@ function resetCalculator () {
   calculator.waitingForSecondOperand = false;
   calculator.operator = null;
   console.log(calculator);
+}
+
+function deleteLastDigit() {
+  const {displayValue} = calculator;
+  if (displayValue.length === 1) {
+    calculator.displayValue = '0';
+    return;
+  }
+  else {
+  calculator.displayValue = displayValue.substring(0, displayValue.length - 1);
+  console.log(calculator);
+  }
 }
