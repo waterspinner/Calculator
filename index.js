@@ -55,14 +55,20 @@ keys.addEventListener('click', (event) => {
     if (target.classList.contains('delete')) {
       deleteLastDigit();
       updateDisplay();
+      return;
     }
-    inuptDigit(target.value);
-    
+   
+    if (target.classList.contains('negativePositive')) {
+      negativePositive();
+      updateDisplay();
+      return;
+    }
+    inputDigit(target.value);
     updateDisplay();
 });
 
 // take digit input and display
-function inuptDigit(digit) {
+function inputDigit(digit) {
   const {displayValue, waitingForSecondOperand} = calculator;
   if (digit === 'delete') {
     return;
@@ -142,9 +148,15 @@ function calculate(firstOperand, secondOperand, operator) {
 }
 
 function equalSign() {
+  const {waitingForSecondOperand} = calculator;
   const result = calculate(calculator.firstOperand, parseFloat(calculator.displayValue), calculator.operator);
+    if (waitingForSecondOperand === true) {
+      return;
+    } 
+    else { 
       calculator.displayValue = String(result);
       calculator.firstOperand = null;
+    }
 }
 
 function resetCalculator () {
@@ -163,6 +175,19 @@ function deleteLastDigit() {
   }
   else {
   calculator.displayValue = displayValue.substring(0, displayValue.length - 1);
+  console.log(calculator);
+  }
+}
+
+function negativePositive() {
+  const {displayValue} = calculator;
+  const value = parseFloat(displayValue);
+  if(value === 0) {
+    calculator.displayValue = '-';
+    console.log(calculator);
+  }
+  else {
+  calculator.displayValue = value * -1;
   console.log(calculator);
   }
 }
